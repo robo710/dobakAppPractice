@@ -1,4 +1,4 @@
-package com.sonchan.dobakapppractice
+package com.sonchan.dobakapppractice.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
