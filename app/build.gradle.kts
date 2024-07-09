@@ -78,5 +78,9 @@ dependencies {
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
 }
