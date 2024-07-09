@@ -7,20 +7,17 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-@Preview
-@Composable
-fun MoneyCountPreview(){
-    MoneyCount(money = 9223372036854775807)
-}
+import androidx.lifecycle.LiveData
 
 @Composable
-fun MoneyCount(money: Long, modifier: Modifier = Modifier) {
+fun MoneyCount(money: LiveData<Long>, modifier: Modifier = Modifier) {
+    val currentMoney by money.observeAsState(0L)
     val formatter: NumberFormat = DecimalFormat("#,###")
-    val formattedMoney = formatter.format(money)
+    val formattedMoney = formatter.format(currentMoney)
 
     Card(
         modifier = modifier
