@@ -1,5 +1,6 @@
 package com.sonchan.dobakapppractice.presentation.main
 
+import android.graphics.Paint.Align
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -47,7 +49,7 @@ fun MainScreenPreview(){
 
 @Composable
 fun MainScreen(){
-    val leftMoney = 9223372036854775807
+    val leftMoney:Long = 1
     var money by remember {
         mutableStateOf("")
     }
@@ -79,7 +81,14 @@ fun MainScreen(){
                 Text(text = "확인")
             }
         }
-        MoneyCount(money = leftMoney)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            Alignment.TopEnd
+        ) {
+            MoneyCount(money = leftMoney)
+        }
     }
     
 }
