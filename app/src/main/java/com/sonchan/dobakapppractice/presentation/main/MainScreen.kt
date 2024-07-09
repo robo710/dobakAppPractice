@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import com.sonchan.dobakapppractice.ui.theme.DobakAppPracticeTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,29 +47,40 @@ fun MainScreenPreview(){
 
 @Composable
 fun MainScreen(){
+    val leftMoney = 9223372036854775807
     var money by remember {
         mutableStateOf("")
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFFFFFFF))
-            .padding(10.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(value = money,
-            onValueChange = { money = it },
-            textStyle = TextStyle(color = Color(0xFF000000)),
-            label = { Text("돈 입력") },
-            placeholder = { Text("EX)1,000,000") },
-            modifier = Modifier.width(350.dp),
-            singleLine = true)
-        Button(
-            onClick = { /*TODO*/ }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "확인")
+            OutlinedTextField(
+                value = money,
+                onValueChange = { money = it },
+                textStyle = TextStyle(color = Color(0xFF000000)),
+                label = { Text("돈 입력") },
+                placeholder = { Text("EX)1,000,000") },
+                modifier = Modifier.width(350.dp),
+                singleLine = true
+            )
+            Button(
+                onClick = { /*TODO*/ }
+            ) {
+                Text(text = "확인")
+            }
         }
+        MoneyCount(money = leftMoney)
     }
+    
 }
+
