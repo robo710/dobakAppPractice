@@ -1,4 +1,6 @@
 package com.sonchan.dobakapppractice.presentation.main
 
-class MainViewModel {
+import androidx.lifecycle.ViewModel
+
+class MainViewModel : ViewModel() {
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "612929300355",
+    "project_id": "android-dobakapppractice",
+    "storage_bucket": "android-dobakapppractice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612929300355:android:5826b7aa38bf9e4c7038b6",
+        "android_client_info": {
+          "package_name": "com.sonchan.dobakapppractice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-XGDY2PDxXoV1Am1sNP5ED2v_yc4QJiw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
