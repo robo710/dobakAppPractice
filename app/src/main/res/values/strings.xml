@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">dobakAppPractice</string>
+    <string name="text_mine">돈받기</string>
+    <string name="text_main">메인</string>
+    <string name="text_rank">랭크</string>
 </resources>
