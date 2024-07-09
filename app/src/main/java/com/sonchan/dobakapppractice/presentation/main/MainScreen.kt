@@ -26,12 +26,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.firestore
 import com.sonchan.dobakapppractice.ui.theme.DobakAppPracticeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        FirebaseApp.initializeApp(this) // Firebase 초기화
         setContent {
             DobakAppPracticeTheme {
                 MainScreen()
@@ -48,10 +52,9 @@ fun MainScreenPreview(){
 
 @Composable
 fun MainScreen(){
-    val leftMoney:Long = 1
-    var money by remember {
-        mutableStateOf("")
-    }
+    val db = Firebase.firestore
+    val leftMoney: Long = 1
+    var money by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -75,7 +78,20 @@ fun MainScreen(){
                 singleLine = true
             )
             Button(
-                onClick = { /*TODO*/ }
+                onClick = {
+                    // Firestore에 데이터 쓰기
+                    val data = hashMapOf(
+                        "money" to money
+                    )
+                    db.collection("user").document("iam")
+                        .set(data)
+                        .addOnSuccessListener {
+                            println("DocumentSnapshot successfully written!")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Error writing document $e")
+                        }
+                }
             ) {
                 Text(text = "확인")
             }
@@ -89,6 +105,5 @@ fun MainScreen(){
             MoneyCount(money = leftMoney)
         }
     }
-    
 }
 
