@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,8 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
 import com.sonchan.dobakapppractice.presentation.alert.LackAlert
+import com.sonchan.dobakapppractice.presentation.nav.BottomNavigation
+import com.sonchan.dobakapppractice.presentation.nav.NavigationGraph
 import com.sonchan.dobakapppractice.ui.theme.DobakAppPracticeTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +41,14 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this) // Firebase 초기화
         setContent {
             DobakAppPracticeTheme {
-                MainScreen(MainViewModel())
+                val navController = rememberNavController()
+                Scaffold(
+                    bottomBar = { BottomNavigation(navController = navController) }
+                ) {
+                    Box(Modifier.padding(it)) {
+                        NavigationGraph(navController = navController)
+                    }
+                }
             }
         }
     }
