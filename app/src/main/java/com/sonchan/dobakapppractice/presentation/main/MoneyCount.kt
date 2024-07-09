@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun MoneyCountPreview(){
-    MoneyCount(money = 1000000000000000000)
+    MoneyCount(money = 9223372036854775807)
 }
 
 @Composable
@@ -27,7 +27,7 @@ fun MoneyCount(money: Long, modifier: Modifier = Modifier) {
     ) {
         Text(
             text = ("잔여 돈 : $formattedMoney"),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(8.dp)
         )
     }
