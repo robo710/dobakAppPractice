@@ -26,9 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.firestore
+import com.sonchan.dobakapppractice.presentation.alert.LackAlert
 import com.sonchan.dobakapppractice.ui.theme.DobakAppPracticeTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this) // Firebase 초기화
         setContent {
             DobakAppPracticeTheme {
-                MainScreen()
+                MainScreen(MainViewModel())
             }
         }
     }
@@ -46,14 +45,14 @@ class MainActivity : ComponentActivity() {
 
 @Preview
 @Composable
-fun MainScreenPreview(){
-    MainScreen()
+fun MainScreenPreview() {
+    DobakAppPracticeTheme {
+        MainScreen(MainViewModel())
+    }
 }
 
 @Composable
-fun MainScreen(){
-    val db = Firebase.firestore
-    val leftMoney: Long = 1
+fun MainScreen(viewModel: MainViewModel) {
     var money by remember { mutableStateOf("") }
 
     Box(
@@ -79,18 +78,7 @@ fun MainScreen(){
             )
             Button(
                 onClick = {
-                    // Firestore에 데이터 쓰기
-                    val data = hashMapOf(
-                        "money" to money
-                    )
-                    db.collection("user").document("iam")
-                        .set(data)
-                        .addOnSuccessListener {
-                            println("DocumentSnapshot successfully written!")
-                        }
-                        .addOnFailureListener { e ->
-                            println("Error writing document $e")
-                        }
+                    viewModel.updateValue(money.toLong())
                 }
             ) {
                 Text(text = "확인")
@@ -100,10 +88,10 @@ fun MainScreen(){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp),
-            Alignment.TopEnd
+            contentAlignment = Alignment.TopEnd
         ) {
-            MoneyCount(money = leftMoney)
+            MoneyCount(money = viewModel.leftMoney)
         }
     }
+    LackAlert(viewModel = viewModel)
 }
-
