@@ -1,9 +1,13 @@
 package com.sonchan.dobakapppractice.presentation.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,30 +15,52 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.FirebaseApp
 import com.sonchan.dobakapppractice.presentation.alert.LackAlert
-import com.sonchan.dobakapppractice.presentation.nav.BottomNavigation
-import com.sonchan.dobakapppractice.presentation.nav.NavigationGraph
+import com.sonchan.dobakapppractice.presentation.login.GoogleAuthUiClient
+import com.sonchan.dobakapppractice.presentation.login.LoginScreen
+import com.sonchan.dobakapppractice.presentation.login.LoginViewModel
+import com.sonchan.dobakapppractice.presentation.profile.ProfileScreen
 import com.sonchan.dobakapppractice.ui.theme.DobakAppPracticeTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,11 +68,83 @@ class MainActivity : ComponentActivity() {
         setContent {
             DobakAppPracticeTheme {
                 val navController = rememberNavController()
-                Scaffold(
-                    bottomBar = { BottomNavigation(navController = navController) }
-                ) {
-                    Box(Modifier.padding(it)) {
-                        NavigationGraph(navController = navController)
+                NavHost(navController = navController, startDestination = "login"){
+                    composable("login"){
+                        val viewModel = viewModel<LoginViewModel>()
+                        val state by viewModel.state.collectAsStateWithLifecycle()
+
+                        LaunchedEffect(key1 = Unit) {
+                            if(googleAuthUiClient.getSignedInUser() != null){
+                                navController.navigate("profile")
+                            }
+                        }
+
+                        val launcher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.StartIntentSenderForResult(),
+                            onResult = { result ->
+                                if (result.resultCode == RESULT_OK){
+                                    lifecycleScope.launch {
+                                        val signInResult = googleAuthUiClient.signInWithIntent(
+                                            intent = result.data ?: return@launch
+                                        )
+                                        viewModel.onSignInResult(signInResult)
+                                    }
+                                }
+                            }
+                        )
+                        
+                        LaunchedEffect(key1 = state.isSignInSuccessful) {
+                            if(state.isSignInSuccessful){
+                                Toast.makeText(
+                                    applicationContext,
+                                    "성공",
+                                    Toast.LENGTH_LONG
+                                ).show()
+
+                                navController.navigate("main")
+                                viewModel.resetState()
+                            }
+                        }
+
+                        LoginScreen(
+                            state = state,
+                            onSignInClick = {
+                                lifecycleScope.launch {
+                                    val signInIntentSender = googleAuthUiClient.signIn()
+                                    launcher.launch(
+                                        IntentSenderRequest.Builder(
+                                            signInIntentSender ?: return@launch
+                                        ).build()
+                                    )
+                                }
+                            }
+                        )
+                    }
+                    composable("profile"){
+                        ProfileScreen(
+                            userData = googleAuthUiClient.getSignedInUser(),
+                            onSignOut = {
+                                lifecycleScope.launch {
+                                    googleAuthUiClient.signOut()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "로그아웃됨",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+
+                                    navController.navigate("login")
+                                }
+                            }
+                        )
+                    }
+                    composable("main") {
+                        MainScreen(
+                            viewModel = MainViewModel
+                                (userData = googleAuthUiClient.getSignedInUser()),
+                            onProfileClick = {
+                                navController.navigate("profile")
+                            }
+                        )
                     }
                 }
             }
@@ -54,16 +152,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
-fun MainScreenPreview() {
-    DobakAppPracticeTheme {
-        MainScreen(MainViewModel())
-    }
-}
-
-@Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(
+    onProfileClick: () -> Unit,
+    viewModel: MainViewModel
+) {
     var money by remember { mutableStateOf("") }
 
     Box(
@@ -71,6 +164,25 @@ fun MainScreen(viewModel: MainViewModel) {
             .fillMaxSize()
             .background(color = Color(0xFFFFFFFF))
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            contentAlignment = Alignment.TopStart
+        ) {
+            IconButton(onClick = onProfileClick) {
+                if (viewModel.userData?.profilePictureUrl != null) {
+                    AsyncImage(
+                        model = viewModel.userData.profilePictureUrl,
+                        contentDescription = "Profile picture",
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +201,9 @@ fun MainScreen(viewModel: MainViewModel) {
             )
             Button(
                 onClick = {
-                    viewModel.updateValue(money.toLong())
+                    viewModel.dobakValue(
+                        money.toLong()
+                    )
                 }
             ) {
                 Text(text = "확인")
