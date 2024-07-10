@@ -82,9 +82,13 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
+    // navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // coil
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }
