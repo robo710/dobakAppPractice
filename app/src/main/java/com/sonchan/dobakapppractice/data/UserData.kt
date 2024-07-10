@@ -1,6 +1,7 @@
 package com.sonchan.dobakapppractice.data
 
 data class UserData(
-    val userName:String,
-    val userMoney:Long
+    val userId: String,
+    val username: String?,
+    val profilePictureUrl: String?
 )
