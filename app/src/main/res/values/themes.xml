@@ -3,6 +3,7 @@
 
     <style name="Theme.DobakAppPractice" parent="android:Theme.Material.Light.NoActionBar" />
     <style name="Theme.MySplashScreen" parent="Theme.DobakAppPractice">
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
 </resources>
