@@ -46,7 +46,7 @@ fun BottomNavigation(navController: NavHostController) {
 
     NavigationBar(
         containerColor = Color.White,
-        contentColor = Color(0xFF3F414E)
+        contentColor = Color(0xFF3F414E),
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -61,15 +61,16 @@ fun BottomNavigation(navController: NavHostController) {
                         modifier = Modifier
                             .width(if (isSelected) 30.dp else 26.dp)  // 선택된 아이콘 크기
                             .height(if (isSelected) 30.dp else 26.dp) // 선택된 아이콘 크기
-                            .padding(if (isSelected) 0.dp else 5.dp) // 선택된 아이콘 패딩
+                            .padding(if (isSelected) 0.dp else 2.dp) // 선택된 아이콘 패딩
                     )
                 },
-                label = { Text(stringResource(id = item.title), fontSize = 9.sp) },
+                label = { Text(stringResource(id = item.title), fontSize = 12.sp) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color(0xFFE49CFF),
                     unselectedIconColor = Color.Gray,
                     selectedTextColor = Color(0xFFE49CFF),
-                    unselectedTextColor = Color.Gray
+                    unselectedTextColor = Color.Gray,
+                    indicatorColor = Color.White
                 ),
                 selected = isSelected,
                 alwaysShowLabel = true,
