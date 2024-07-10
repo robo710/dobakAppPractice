@@ -2,4 +2,7 @@
 <resources>
 
     <style name="Theme.DobakAppPractice" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.MySplashScreen" parent="Theme.DobakAppPractice">
+    </style>
+
 </resources>
