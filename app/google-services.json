@@ -12,7 +12,20 @@
           "package_name": "com.sonchan.dobakapppractice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "612929300355-32k4u434jks2bap59m6pm8ejeetuplq1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sonchan.dobakapppractice",
+            "certificate_hash": "a35eff5493e7692f81947da46bc828a5d9a0a8ed"
+          }
+        },
+        {
+          "client_id": "612929300355-dt0rcth7etdkebn5v4gpcdh1nd2el6gk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC-XGDY2PDxXoV1Am1sNP5ED2v_yc4QJiw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612929300355-dt0rcth7etdkebn5v4gpcdh1nd2el6gk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
