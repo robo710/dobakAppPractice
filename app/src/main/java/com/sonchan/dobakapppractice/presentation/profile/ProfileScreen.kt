@@ -1,5 +1,6 @@
 package com.sonchan.dobakapppractice.presentation.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,7 +30,8 @@ fun ProfileScreen(
 ){
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -49,9 +52,10 @@ fun ProfileScreen(
         if (userData?.username != null) {
             Text(
                 text = userData.username,
+                color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 fontSize = 36.sp,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
             Spacer(
                 modifier = Modifier

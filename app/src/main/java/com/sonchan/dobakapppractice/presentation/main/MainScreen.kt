@@ -1,6 +1,7 @@
 package com.sonchan.dobakapppractice.presentation.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
@@ -35,10 +37,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: MainViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         bottomBar = {  if (currentRoute != "login" && currentRoute != "profile") {
             BottomNavigation(navController)
