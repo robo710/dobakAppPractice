@@ -1,5 +1,6 @@
-package com.sonchan.dobakapppractice.presentation.main
+package com.sonchan.dobakapppractice.presentation.dobak
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.sonchan.dobakapppractice.data.UserData
 
 class DobakViewModel(val userData: UserData?) : ViewModel() {
+    val db = Firebase.firestore
 
     private var _leftMoney = MutableLiveData<Long>()
     private var _showLackAlert = MutableLiveData<Boolean>()
@@ -21,10 +23,39 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
     init {
         _leftMoney.value = 0
         _showLackAlert.value = false
+        dobakMoney()
+    }
+
+    fun dobakMoney(){
+        if(userData?.username != null) {
+            db.collection("user").document(userData.userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        if (document.exists()) {
+                            val data = document.data // 문서의 데이터를 Map 형태로 가져옵니다
+                            val money = data?.get("money") as Long?
+                            money?.let {
+                                _leftMoney.value = it
+                            }
+                            Log.d("로그", "DocumentSnapshot data: $data")
+                            Log.d("로그", "DocumentSnapshot money: $money")
+                            Log.d("로그", "DocumentSnapshot _leftMoney: ${_leftMoney.value}")
+                            println("DocumentSnapshot data: $data")
+                        } else {
+                            println("No such document")
+                        }
+                    } else {
+                        println("Document does not exist")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    println("Error getting document: $e")
+                }
+        }
     }
 
     fun dobakValue(input: Long) {
-        val db = Firebase.firestore
         if (_leftMoney.value!! < input) {
             _showLackAlert.value = true  // LackAlert를 표시하기 위한 상태 변경
         } else {

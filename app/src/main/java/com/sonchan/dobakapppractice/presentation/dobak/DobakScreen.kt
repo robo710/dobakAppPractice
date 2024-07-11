@@ -1,4 +1,4 @@
-package com.sonchan.dobakapppractice.presentation.main
+package com.sonchan.dobakapppractice.presentation.dobak
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +35,6 @@ fun DobakScreen(
     onProfileClick: () -> Unit,
     viewModel: DobakViewModel
 ) {
-    val navController = rememberNavController()
     var money by remember { mutableStateOf("") }
 
     Box(
@@ -80,9 +79,11 @@ fun DobakScreen(
             )
             Button(
                 onClick = {
-                    viewModel.dobakValue(
-                        money.toLong()
-                    )
+                    if(money!= "") {
+                        viewModel.dobakValue(
+                            money.toLong()
+                        )
+                    }
                 }
             ) {
                 Text(text = "확인")

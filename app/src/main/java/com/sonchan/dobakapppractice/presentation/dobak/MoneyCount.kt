@@ -1,4 +1,4 @@
-package com.sonchan.dobakapppractice.presentation.main
+package com.sonchan.dobakapppractice.presentation.dobak
 
 import android.icu.text.DecimalFormat
 import android.icu.text.NumberFormat
@@ -15,7 +15,7 @@ import androidx.lifecycle.LiveData
 
 @Composable
 fun MoneyCount(money: LiveData<Long>, modifier: Modifier = Modifier) {
-    val currentMoney by money.observeAsState(0L)
+    val currentMoney by money.observeAsState()
     val formatter: NumberFormat = DecimalFormat("#,###")
     val formattedMoney = formatter.format(currentMoney)
 
