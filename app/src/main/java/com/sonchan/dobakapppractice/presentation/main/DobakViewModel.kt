@@ -7,7 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sonchan.dobakapppractice.data.UserData
 
-class MainViewModel(val userData: UserData?) : ViewModel() {
+class DobakViewModel(val userData: UserData?) : ViewModel() {
 
     private var _leftMoney = MutableLiveData<Long>()
     private var _showLackAlert = MutableLiveData<Boolean>()
