@@ -40,7 +40,7 @@ fun BottomNavigationPreview() {
 fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.Mine,
-        BottomNavItem.Main,
+        BottomNavItem.Dobak,
         BottomNavItem.Rank
     )
 
@@ -73,7 +73,7 @@ fun BottomNavigation(navController: NavHostController) {
                     indicatorColor = Color.White
                 ),
                 selected = isSelected,
-                alwaysShowLabel = true,
+                alwaysShowLabel = false,
                 onClick = {
                     navController.navigate(item.screenRoute) {
                         navController.graph.startDestinationRoute?.let {

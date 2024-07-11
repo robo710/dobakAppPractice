@@ -24,12 +24,13 @@ import androidx.navigation.compose.rememberNavController
 import com.sonchan.dobakapppractice.presentation.login.GoogleAuthUiClientProvider.googleAuthUiClient
 import com.sonchan.dobakapppractice.presentation.login.LoginScreen
 import com.sonchan.dobakapppractice.presentation.login.LoginViewModel
+import com.sonchan.dobakapppractice.presentation.main.MainScreen
 import com.sonchan.dobakapppractice.presentation.profile.ProfileScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun setupNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "login") {
+fun setupNavGraph(navController: NavHostController, destination: String) {
+    NavHost(navController = navController, startDestination = destination) {
         composable("login") {
             val viewModel = viewModel<LoginViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
@@ -38,7 +39,7 @@ fun setupNavGraph(navController: NavHostController) {
 
             LaunchedEffect(key1 = Unit) {
                 if (googleAuthUiClient.getSignedInUser() != null) {
-                    navController.navigate("profile")
+                    navController.navigate("main")
                 }
             }
 
@@ -104,14 +105,7 @@ fun setupNavGraph(navController: NavHostController) {
             )
         }
         composable("main") {
-            val navController = rememberNavController()
-            Scaffold(
-                bottomBar = { BottomNavigation(navController = navController) }
-            ) {
-                Box(Modifier.padding(it)) {
-                    NavigationGraph(navController = navController)
-                }
-            }
+            MainScreen()
         }
     }
 }
