@@ -78,6 +78,25 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
         }
     }
 
+    fun addMoney() {
+        _leftMoney.value = (_leftMoney.value ?: 0) + 10000
+
+        val data = hashMapOf(
+            "money" to _leftMoney.value
+        )
+
+        if(userData?.username != null) {
+            db.collection("user").document(userData.userId)
+                .set(data)
+                .addOnSuccessListener {
+                    println("DocumentSnapshot successfully written!")
+                }
+                .addOnFailureListener { e ->
+                    println("Error writing document $e")
+                }
+        }
+    }
+
     fun dismissLackAlert() {
         _showLackAlert.value = false  // LackAlert를 닫기 위한 상태 변경
     }
