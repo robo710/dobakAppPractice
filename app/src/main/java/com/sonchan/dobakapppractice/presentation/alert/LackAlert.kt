@@ -3,7 +3,7 @@ package com.sonchan.dobakapppractice.presentation.alert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import com.sonchan.dobakapppractice.presentation.main.DobakViewModel
+import com.sonchan.dobakapppractice.presentation.dobak.DobakViewModel
 
 @Composable
 fun LackAlert(viewModel: DobakViewModel) {
