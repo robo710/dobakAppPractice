@@ -3,10 +3,10 @@ package com.sonchan.dobakapppractice.presentation.alert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import com.sonchan.dobakapppractice.presentation.main.MainViewModel
+import com.sonchan.dobakapppractice.presentation.main.DobakViewModel
 
 @Composable
-fun LackAlert(viewModel: MainViewModel) {
+fun LackAlert(viewModel: DobakViewModel) {
     val showLackAlert by viewModel.showLackAlert.observeAsState(false)
 
     if (showLackAlert) {
