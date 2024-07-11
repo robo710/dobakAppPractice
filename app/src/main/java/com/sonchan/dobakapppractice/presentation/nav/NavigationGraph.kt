@@ -1,6 +1,10 @@
 package com.sonchan.dobakapppractice.presentation.nav
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +37,13 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable("profile") {
             val navController = rememberNavController()
-            setupNavGraph(navController = navController, "profile")
+            Scaffold(
+                bottomBar = {  }
+            ) {
+                Box(Modifier.padding(it)) {
+                    setupNavGraph(navController = navController, "profile")
+                }
+            }
         }
     }
 }
