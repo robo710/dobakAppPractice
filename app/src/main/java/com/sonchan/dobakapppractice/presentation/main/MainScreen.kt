@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +36,8 @@ import coil.compose.AsyncImage
 import com.google.firebase.FirebaseApp
 import com.sonchan.dobakapppractice.presentation.alert.LackAlert
 import com.sonchan.dobakapppractice.presentation.login.GoogleAuthUiClientProvider
+import com.sonchan.dobakapppractice.presentation.nav.BottomNavigation
+import com.sonchan.dobakapppractice.presentation.nav.NavigationGraph
 import com.sonchan.dobakapppractice.presentation.nav.setupNavGraph
 import com.sonchan.dobakapppractice.ui.theme.DobakAppPracticeTheme
 
@@ -47,77 +50,30 @@ class MainActivity : ComponentActivity() {
         setContent {
             DobakAppPracticeTheme {
                 val navController = rememberNavController()
-                setupNavGraph(navController = navController)
+                setupNavGraph(navController = navController, "login")
             }
+//            DobakAppPracticeTheme {
+//                val navController = rememberNavController()
+//                Scaffold(
+//                    bottomBar = { BottomNavigation(navController = navController) }
+//                ) {
+//                    Box(Modifier.padding(it)) {
+//                        NavigationGraph(navController = navController)
+//                    }
+//                }
+//            }
         }
     }
 }
 
 @Composable
-fun MainScreen(
-    onProfileClick: () -> Unit,
-    viewModel: MainViewModel
-) {
-    var money by remember { mutableStateOf("") }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFFFFFFFF))
+fun MainScreen() {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = { BottomNavigation(navController = navController) }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            contentAlignment = Alignment.TopStart
-        ) {
-            IconButton(onClick = onProfileClick) {
-                if (viewModel.userData?.profilePictureUrl != null) {
-                    AsyncImage(
-                        model = viewModel.userData.profilePictureUrl,
-                        contentDescription = "Profile picture",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            OutlinedTextField(
-                value = money,
-                onValueChange = { money = it },
-                textStyle = TextStyle(color = Color(0xFF000000)),
-                label = { Text("돈 입력") },
-                placeholder = { Text("EX)1,000,000") },
-                modifier = Modifier.width(350.dp),
-                singleLine = true
-            )
-            Button(
-                onClick = {
-                    viewModel.dobakValue(
-                        money.toLong()
-                    )
-                }
-            ) {
-                Text(text = "확인")
-            }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            contentAlignment = Alignment.TopEnd
-        ) {
-            MoneyCount(money = viewModel.leftMoney)
+        Box(Modifier.padding(it)) {
+            NavigationGraph(navController = navController)
         }
     }
-    LackAlert(viewModel = viewModel)
 }
