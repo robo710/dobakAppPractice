@@ -56,7 +56,7 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
         }
     }
 
-    fun setUserData(){
+    private fun setUserData(){
         if(userData?.username != null) {
             val data = hashMapOf(
                 "money" to _leftMoney.value,
