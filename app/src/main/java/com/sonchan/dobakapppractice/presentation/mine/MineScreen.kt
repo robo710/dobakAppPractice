@@ -64,7 +64,7 @@ fun MineScreen(viewModel: DobakViewModel) {
                     if (isButtonEnabled) {
                         isButtonEnabled = false
                         val currentTime = System.currentTimeMillis()
-                        val enableTime = currentTime + 30000 // 30초 후
+                        val enableTime = currentTime + 3000 // 30초 후
                         sharedPreferences.edit().putLong("disableTime", enableTime).apply()
 
                         coroutineScope.launch {
@@ -79,15 +79,21 @@ fun MineScreen(viewModel: DobakViewModel) {
                     }
                 },
                 enabled = isButtonEnabled,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             ) {
                 Text(text = "확인")
             }
+        }
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             if (!isButtonEnabled) {
                 Text(
                     text = "남은 시간: ${remainingTime}초",
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(bottom = 160.dp)
                 )
             }
         }
