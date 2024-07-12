@@ -79,11 +79,9 @@ fun DobakScreen(
             )
             Button(
                 onClick = {
-                    if(money!= "") {
-                        viewModel.dobakValue(
-                            money.toLong()
-                        )
-                    }
+                    viewModel.dobakValue(
+                        money.toLong()
+                    )
                 }
             ) {
                 Text(text = "확인")

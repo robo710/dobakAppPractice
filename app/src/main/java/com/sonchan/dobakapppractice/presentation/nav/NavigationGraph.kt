@@ -16,21 +16,22 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.sonchan.dobakapppractice.presentation.dobak.DobakScreen
+import com.sonchan.dobakapppractice.presentation.dobak.DobakViewModel
 import com.sonchan.dobakapppractice.presentation.login.GoogleAuthUiClientProvider.googleAuthUiClient
 import com.sonchan.dobakapppractice.presentation.login.LoginScreen
 import com.sonchan.dobakapppractice.presentation.login.LoginViewModel
-import com.sonchan.dobakapppractice.presentation.main.DobakScreen
-import com.sonchan.dobakapppractice.presentation.main.DobakViewModel
 import com.sonchan.dobakapppractice.presentation.main.MainScreen
+import com.sonchan.dobakapppractice.presentation.main.MainViewModel
 import com.sonchan.dobakapppractice.presentation.mine.MineScreen
-import com.sonchan.dobakapppractice.presentation.mine.MineViewModel
 import com.sonchan.dobakapppractice.presentation.profile.ProfileScreen
 import com.sonchan.dobakapppractice.presentation.rank.RankScreen
+import com.sonchan.dobakapppractice.presentation.rank.RankViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun NavigationGraph(navController: NavHostController, destination: String) {
+
     NavHost(navController = navController, startDestination = destination) {
         composable(BottomNavItem.Dobak.screenRoute) {
             DobakScreen(
@@ -42,10 +43,10 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
             )
         }
         composable(BottomNavItem.Mine.screenRoute) {
-            MineScreen(viewModel = MineViewModel())
+            MineScreen(viewModel = DobakViewModel(userData = googleAuthUiClient.getSignedInUser()))
         }
         composable(BottomNavItem.Rank.screenRoute) {
-            RankScreen()
+            RankScreen(viewModel = RankViewModel())
         }
         composable("login") {
             val viewModel = viewModel<LoginViewModel>()
@@ -55,7 +56,13 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
 
             LaunchedEffect(key1 = Unit) {
                 if (googleAuthUiClient.getSignedInUser() != null) {
-                    navController.navigate("main")
+                    navController.navigate("main"){
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             }
 
@@ -82,9 +89,11 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                     ).show()
 
                     navController.navigate("main"){
-                        popUpTo(navController.graph.id){
+                        popUpTo(navController.graph.findStartDestination().id) {
                             inclusive = true
                         }
+                        launchSingleTop = true
+                        restoreState = true
                     }
                     viewModel.resetState()
                 }
@@ -131,7 +140,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
             )
         }
         composable("main") {
-            MainScreen()
+            MainScreen(MainViewModel())
         }
     }
 }
