@@ -23,7 +23,6 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
     init {
         _leftMoney.value = (_leftMoney.value ?: 0)
         _showLackAlert.value = false
-        setUserData()
         loadUserData()
     }
 
@@ -56,7 +55,35 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
         }
     }
 
-    private fun setUserData(){
+    fun dobakValue(input: Long) {
+        loadUserData()
+        if (_leftMoney.value!! < input) {
+            _showLackAlert.value = true  // LackAlert를 표시하기 위한 상태 변경
+        } else {
+            if(userData?.username != null) {
+                _leftMoney.value = (_leftMoney.value ?: 0) - input
+
+                val data = hashMapOf(
+                    "money" to _leftMoney.value,
+                    "username" to userData.username
+                )
+
+                db.collection("user").document(userData.userId)
+                    .set(data)
+                    .addOnSuccessListener {
+                        println("DocumentSnapshot successfully written!")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error writing document $e")
+                    }
+            }
+        }
+    }
+
+    fun addMoney() {
+        loadUserData()
+        _leftMoney.value = (_leftMoney.value ?: 0) + 10000
+
         if(userData?.username != null) {
             val data = hashMapOf(
                 "money" to _leftMoney.value,
@@ -71,39 +98,6 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
                 .addOnFailureListener { e ->
                     println("Error writing document $e")
                 }
-        }
-    }
-
-    fun dobakValue(input: Long) {
-        loadUserData()
-        if (_leftMoney.value!! < input) {
-            _showLackAlert.value = true  // LackAlert를 표시하기 위한 상태 변경
-        } else {
-            _leftMoney.value = (_leftMoney.value ?: 0) - input
-            setUserData()
-        }
-    }
-
-    fun addMoney() {
-        loadUserData()
-        _leftMoney.value = (_leftMoney.value ?: 0) + 10000
-
-        if(userData?.username != null) {
-            val data = hashMapOf(
-                "money" to _leftMoney.value,
-                "username" to userData.username
-            )
-
-            if (userData?.username != null) {
-                db.collection("user").document(userData.userId)
-                    .set(data)
-                    .addOnSuccessListener {
-                        println("DocumentSnapshot successfully written!")
-                    }
-                    .addOnFailureListener { e ->
-                        println("Error writing document $e")
-                    }
-            }
         }
     }
 
