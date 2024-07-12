@@ -64,7 +64,7 @@ fun MineScreen(viewModel: DobakViewModel) {
                     if (isButtonEnabled) {
                         isButtonEnabled = false
                         val currentTime = System.currentTimeMillis()
-                        val enableTime = currentTime + 3000 // 30초 후
+                        val enableTime = currentTime + 3000 // 3초 후
                         sharedPreferences.edit().putLong("disableTime", enableTime).apply()
 
                         coroutineScope.launch {
