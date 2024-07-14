@@ -140,7 +140,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
             )
         }
         composable("main") {
-            MainScreen(MainViewModel())
+            MainScreen()
         }
     }
 }
