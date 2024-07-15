@@ -72,42 +72,41 @@ class DobakViewModel(val userData: UserData?) : ViewModel() {
     }
 
     fun dobak(input: Long) {
-        for(i in 1..1000) {
-            loadUserData()
-            val random = Random.nextInt(101)
-            var success: Long = 0
+        loadUserData()
+        val random = Random.nextInt(101)
+        var success: Long = 0
 
-            if (_leftMoney.value!! < input) {
-                _showLackAlert.value = true  // LackAlert를 표시하기 위한 상태 변경
-            } else {
-                if (random < 50) {
-                    _showSuccessAlert.value = true
-                    success = input * 2
-                } else if (random in 50..99) {
-                    _showFailAlert.value = true
-                } else if (random == 100) {
-                    _showLegendAlert.value = true
-                    success = input * 10
-                    Log.d("랜덤확인", "DobakViewModel - random : ${random}")
-                }
-                if (userData?.username != null) {
-                    _leftMoney.value = (_leftMoney.value ?: 0) - input + success
-
-                    val data = hashMapOf(
-                        "money" to _leftMoney.value,
-                        "username" to userData.username
-                    )
-
-                    db.collection("user").document(userData.userId)
-                        .set(data)
-                        .addOnSuccessListener {
-                            println("DocumentSnapshot successfully written!")
-                        }
-                        .addOnFailureListener { e ->
-                            println("Error writing document $e")
-                        }
-                }
+        if (_leftMoney.value!! < input) {
+            _showLackAlert.value = true  // LackAlert를 표시하기 위한 상태 변경
+        } else {
+            if (random < 50) {
+                _showSuccessAlert.value = true
+                success = input * 2
+            } else if (random in 50..99) {
+                _showFailAlert.value = true
+            } else if (random == 100) {
+                _showLegendAlert.value = true
+                success = input * 10
+                Log.d("랜덤확인", "DobakViewModel - random : ${random}")
             }
+            if (userData?.username != null) {
+                _leftMoney.value = (_leftMoney.value ?: 0) - input + success
+
+                val data = hashMapOf(
+                    "money" to _leftMoney.value,
+                    "username" to userData.username
+                )
+
+                db.collection("user").document(userData.userId)
+                    .set(data)
+                    .addOnSuccessListener {
+                        println("DocumentSnapshot successfully written!")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error writing document $e")
+                    }
+            }
+
         }
     }
 
