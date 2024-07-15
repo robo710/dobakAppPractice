@@ -34,3 +34,13 @@ fun FailAlert(viewModel: DobakViewModel) {
             onClickConfirm = { viewModel.dismissAlert() })
     }
 }
+
+@Composable
+fun LegendAlert(viewModel: DobakViewModel) {
+    val showLegendAlert by viewModel.showLegendAlert.observeAsState(false)
+
+    if (showLegendAlert) {
+        CustomAlertDialog(title = "대성공!!!", description = "OMG",
+            onClickConfirm = { viewModel.dismissAlert() })
+    }
+}

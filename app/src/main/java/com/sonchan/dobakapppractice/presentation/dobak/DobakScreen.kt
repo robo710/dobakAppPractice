@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sonchan.dobakapppractice.presentation.alert.FailAlert
 import com.sonchan.dobakapppractice.presentation.alert.LackAlert
+import com.sonchan.dobakapppractice.presentation.alert.LegendAlert
 import com.sonchan.dobakapppractice.presentation.alert.SuccessAlert
 
 @Composable
@@ -109,5 +110,6 @@ fun DobakScreen(
         LackAlert(viewModel = viewModel)
         SuccessAlert(viewModel = viewModel)
         FailAlert(viewModel = viewModel)
+        LegendAlert(viewModel = viewModel)
     }
 }
