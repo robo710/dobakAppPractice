@@ -6,11 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -42,13 +45,26 @@ fun MainScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    Scaffold(
-        bottomBar = {  if (currentRoute != "login" && currentRoute != "profile") {
-            BottomNavigation(navController)
-        }}
+    Box(
+        modifier = Modifier
+        .fillMaxSize()
     ) {
-        Box(Modifier.padding(it)) {
+        Box(
+            modifier = Modifier
+                .padding(bottom = if (currentRoute != "login" && currentRoute != "profile") 56.dp else 0.dp)
+        ) {
             NavigationGraph(navController = navController, BottomNavItem.Dobak.screenRoute)
+        }
+        if (currentRoute != "login" && currentRoute != "profile") {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                BottomNavigation(
+                    navController = navController
+                )
+            }
         }
     }
 }
