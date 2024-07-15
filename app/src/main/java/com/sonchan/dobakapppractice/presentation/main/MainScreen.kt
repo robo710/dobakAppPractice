@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,26 +43,38 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: MainViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    // MainViewModel에서 가져온 shouldShowBottomNavigation 상태
+    val shouldShowBottomNavigation by viewModel.shouldShowBottomNavigation
+
+    if(shouldShowBottomNavigation) {
+        // currentRoute 변경 시 viewModel에서 상태 업데이트
+        LaunchedEffect(currentRoute) {
+            viewModel.updateBottomNavigationVisibility(currentRoute)
+        }
+    }
+
     Box(
-        modifier = Modifier
-        .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier
-                .padding(bottom = if (currentRoute != "login" && currentRoute != "profile") 56.dp else 0.dp)
+                .padding(bottom = if (shouldShowBottomNavigation) 56.dp else 0.dp)
+                .fillMaxSize()
         ) {
             NavigationGraph(navController = navController, BottomNavItem.Dobak.screenRoute)
         }
-        if (currentRoute != "login" && currentRoute != "profile") {
+
+        // shouldShowBottomNavigation 값에 따라 조건부로 BottomNavigation을 렌더링
+        if (shouldShowBottomNavigation) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter
+                contentAlignment = Alignment.BottomCenter // contentAlignment의 속성을 수정
             ) {
                 BottomNavigation(
                     navController = navController

@@ -61,7 +61,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                             inclusive = true
                         }
                         launchSingleTop = true
-                        restoreState = true
+                        restoreState = false
                     }
                 }
             }
@@ -93,7 +93,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                             inclusive = true
                         }
                         launchSingleTop = true
-                        restoreState = true
+                        restoreState = false
                     }
                     viewModel.resetState()
                 }
@@ -114,6 +114,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
             )
         }
         composable("profile") {
+            val mainViewModel: MainViewModel = viewModel()
             val coroutineScope = rememberCoroutineScope()
             val context = LocalContext.current
 
@@ -121,6 +122,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                 userData = googleAuthUiClient.getSignedInUser(),
                 onSignOut = {
                     coroutineScope.launch {
+                        mainViewModel.setBottomNavigationVisibility(false)
                         googleAuthUiClient.signOut()
                         Toast.makeText(
                             context,
@@ -133,14 +135,14 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                                 inclusive = true
                             }
                             launchSingleTop = true
-                            restoreState = true
+                            restoreState = false
                         }
                     }
                 }
             )
         }
         composable("main") {
-            MainScreen()
+            MainScreen(viewModel = MainViewModel())
         }
     }
 }
