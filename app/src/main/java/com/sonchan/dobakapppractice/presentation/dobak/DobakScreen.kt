@@ -26,9 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.sonchan.dobakapppractice.presentation.alert.FailAlert
 import com.sonchan.dobakapppractice.presentation.alert.LackAlert
+import com.sonchan.dobakapppractice.presentation.alert.SuccessAlert
 
 @Composable
 fun DobakScreen(
@@ -79,9 +80,19 @@ fun DobakScreen(
             )
             Button(
                 onClick = {
-                    viewModel.dobakValue(
-                        money.toLong()
-                    )
+                    if (money != "") {
+                        try {
+                            val longMoney = money.toLong()
+                            if (longMoney > 0) {
+                                viewModel.dobak(
+                                    longMoney
+                                )
+                                money = ""
+                            }
+                        } catch (e: Exception){
+                            e.printStackTrace()
+                        }
+                    }
                 }
             ) {
                 Text(text = "확인")
@@ -96,5 +107,7 @@ fun DobakScreen(
             MoneyCount(money = viewModel.leftMoney)
         }
         LackAlert(viewModel = viewModel)
+        SuccessAlert(viewModel = viewModel)
+        FailAlert(viewModel = viewModel)
     }
 }
