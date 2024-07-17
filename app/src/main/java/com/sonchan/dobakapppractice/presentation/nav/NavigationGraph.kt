@@ -61,7 +61,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                             inclusive = true
                         }
                         launchSingleTop = true
-                        restoreState = false
+                        restoreState = true
                     }
                 }
             }
@@ -93,7 +93,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                             inclusive = true
                         }
                         launchSingleTop = true
-                        restoreState = false
+                        restoreState = true
                     }
                     viewModel.resetState()
                 }
@@ -135,7 +135,7 @@ fun NavigationGraph(navController: NavHostController, destination: String) {
                                 inclusive = true
                             }
                             launchSingleTop = true
-                            restoreState = false
+                            restoreState = true
                         }
                     }
                 }
